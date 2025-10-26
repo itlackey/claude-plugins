@@ -1,0 +1,13 @@
+debug/
+file-history/
+ide/
+local/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+todos/
+.credentials.json
+history.jsonl
+settings.json
+plugins/

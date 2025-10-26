@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Paged.js Document</title>
+    <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <style>
+        /* Page setup */
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm 2.5cm 2cm;
+        }
+        
+        /* Headers and footers */
+        @page {
+            @top-center {
+                content: string(chapter-title);
+                font-style: italic;
+                font-size: 10pt;
+                color: #666;
+            }
+            
+            @bottom-center {
+                content: "Page " counter(page);
+                font-size: 10pt;
+            }
+        }
+        
+        /* No header on first page of chapters */
+        @page chapter:first {
+            @top-center {
+                content: none;
+            }
+        }
+        
+        /* Preview styling for screen */
+        @media screen {
+            body {
+                background: #eee;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            .pagedjs_pages {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .pagedjs_page {
+                background: white;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                margin: 1cm auto;
+            }
+        }
+        
+        /* Typography */
+        body {
+            font-family: Georgia, serif;
+            font-size: 11pt;
+            line-height: 1.6;
+        }
+        
+        /* Chapters */
+        .chapter {
+            page: chapter;
+            break-before: page;
+        }
+        
+        h1 {
+            font-size: 24pt;
+            margin: 2em 0 1em 0;
+            break-after: avoid;
+            string-set: chapter-title content();
+        }
+        
+        h2 {
+            font-size: 18pt;
+            margin: 1.5em 0 0.5em 0;
+            break-after: avoid;
+            break-inside: avoid;
+        }
+        
+        h3 {
+            font-size: 14pt;
+            margin: 1em 0 0.5em 0;
+            break-after: avoid;
+            break-inside: avoid;
+        }
+        
+        p {
+            margin: 0 0 1em 0;
+            orphans: 3;
+            widows: 3;
+        }
+        
+        /* Keep code blocks together */
+        pre {
+            break-inside: avoid;
+            background: #f5f5f5;
+            padding: 1em;
+            border-left: 3px solid #333;
+            font-size: 9pt;
+            overflow-x: auto;
+        }
+        
+        /* Figure handling */
+        figure {
+            break-inside: avoid;
+            margin: 1.5em 0;
+            text-align: center;
+        }
+        
+        figcaption {
+            font-size: 9pt;
+            font-style: italic;
+            margin-top: 0.5em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter">
+        <h1>Chapter 1: Introduction to Paged.js</h1>
+        
+        <p>Paged.js is a powerful polyfill library that brings CSS Paged Media features to modern browsers. This enables designers and developers to create sophisticated print layouts using familiar web technologies.</p>
+        
+        <p>This sample document demonstrates several key features of Paged.js including running headers, page numbering, page breaks, and more. Each chapter starts on a new page, and the chapter title appears in the header.</p>
+        
+        <h2>Why Use Paged.js?</h2>
+        
+        <p>Traditional print layout tools are often expensive, proprietary, and have steep learning curves. Paged.js allows you to use HTML and CSS - technologies you may already know - to create professional print documents.</p>
+        
+        <p>Benefits include:</p>
+        <ul>
+            <li>Use standard web technologies (HTML/CSS)</li>
+            <li>Version control friendly (plain text files)</li>
+            <li>Automated workflows possible</li>
+            <li>Preview in browser before printing</li>
+            <li>Generate PDFs programmatically</li>
+        </ul>
+        
+        <h2>Key Features</h2>
+        
+        <p>Paged.js supports most CSS Paged Media features including page breaks, running headers and footers, page counters, named pages, and margin boxes.</p>
+        
+        <h3>Page Breaks</h3>
+        
+        <p>Control where content breaks across pages using CSS properties like <code>break-before</code>, <code>break-after</code>, and <code>break-inside</code>. For example, this chapter starts on a new page because it has <code>break-before: page</code> applied.</p>
+        
+        <pre>
+.chapter {
+    break-before: page;
+}
+
+h2, h3 {
+    break-after: avoid;
+    break-inside: avoid;
+}</pre>
+        
+        <h3>Running Headers and Footers</h3>
+        
+        <p>Notice the chapter title in the header and page number in the footer. These are defined using margin boxes in <code>@page</code> rules and populated using <code>string-set</code>.</p>
+        
+        <pre>
+h1 {
+    string-set: chapter-title content();
+}
+
+@page {
+    @top-center {
+        content: string(chapter-title);
+    }
+}</pre>
+    </div>
+    
+    <div class="chapter">
+        <h1>Chapter 2: Working with Layouts</h1>
+        
+        <p>Creating effective page layouts requires understanding how content flows across pages and how to control that flow.</p>
+        
+        <h2>Controlling Page Breaks</h2>
+        
+        <p>Page breaks can be one of the most challenging aspects of print layout. Content may break in awkward places, splitting tables, images, or related text across pages.</p>
+        
+        <p>The key is to use the <code>break-inside: avoid</code> property on elements that should stay together, and <code>break-after: avoid</code> on elements that should stay with following content.</p>
+        
+        <h3>Common Break Scenarios</h3>
+        
+        <p>Here are some common scenarios and how to handle them:</p>
+        
+        <p><strong>Headings:</strong> Always keep headings with at least some of the following content. Use <code>break-after: avoid</code> on headings to prevent orphaned headings.</p>
+        
+        <p><strong>Images and figures:</strong> Apply <code>break-inside: avoid</code> to figure elements to keep images and captions together.</p>
+        
+        <p><strong>Code blocks:</strong> Add <code>break-inside: avoid</code> to pre elements to prevent code from splitting across pages.</p>
+        
+        <p><strong>Lists:</strong> Consider applying <code>break-inside: avoid</code> to list items if they're short, or to the entire list if it should stay together.</p>
+        
+        <h2>Widows and Orphans</h2>
+        
+        <p>Typography best practices include controlling widows (single lines at the top of a page) and orphans (single lines at the bottom). Use the <code>widows</code> and <code>orphans</code> properties to specify minimum lines.</p>
+        
+        <pre>
+p {
+    orphans: 3;  /* At least 3 lines at bottom */
+    widows: 3;   /* At least 3 lines at top */
+}</pre>
+        
+        <h2>Testing and Debugging</h2>
+        
+        <p>When working on layouts, it's helpful to add temporary visual debugging styles to see page boundaries and break points:</p>
+        
+        <pre>
+/* Visual debugging */
+* {
+    outline: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+@page {
+    border: 2px solid red;
+}</pre>
+        
+        <p>Remove these styles before final output, but they're invaluable during development to understand how content is flowing across pages.</p>
+    </div>
+    
+    <div class="chapter">
+        <h1>Chapter 3: Advanced Techniques</h1>
+        
+        <p>Once you're comfortable with basic page layouts, you can explore more advanced features.</p>
+        
+        <h2>Named Pages</h2>
+        
+        <p>Different sections of your document may require different page layouts. Use named pages to apply different <code>@page</code> rules to different sections.</p>
+        
+        <pre>
+@page chapter {
+    margin: 3cm 2cm;
+}
+
+@page appendix {
+    margin: 2cm;
+    @top-center {
+        content: "Appendix";
+    }
+}
+
+.chapter { page: chapter; }
+.appendix { page: appendix; }</pre>
+        
+        <h2>Left and Right Pages</h2>
+        
+        <p>For book layouts, you typically want different headers on left (verso) and right (recto) pages. Use the <code>:left</code> and <code>:right</code> pseudo-classes:</p>
+        
+        <pre>
+@page :left {
+    @top-left {
+        content: string(book-title);
+    }
+    @top-right {
+        content: counter(page);
+    }
+}
+
+@page :right {
+    @top-left {
+        content: counter(page);
+    }
+    @top-right {
+        content: string(chapter-title);
+    }
+}</pre>
+        
+        <h2>Counters</h2>
+        
+        <p>Beyond page numbers, you can create custom counters for chapters, figures, tables, and more:</p>
+        
+        <pre>
+body {
+    counter-reset: chapter figure;
+}
+
+h1 {
+    counter-increment: chapter;
+}
+
+h1::before {
+    content: "Chapter " counter(chapter) ": ";
+}
+
+figure {
+    counter-increment: figure;
+}
+
+figcaption::before {
+    content: "Figure " counter(chapter) "." counter(figure) ": ";
+}</pre>
+        
+        <h2>Best Practices</h2>
+        
+        <p>To create the best layouts:</p>
+        
+        <ul>
+            <li>Start with basic @page rules and add complexity gradually</li>
+            <li>Test frequently as you develop</li>
+            <li>Use semantic HTML for easier CSS targeting</li>
+            <li>Keep CSS organized by feature area</li>
+            <li>Document complex rules with comments</li>
+            <li>Always preview the final PDF output</li>
+        </ul>
+        
+        <h2>Conclusion</h2>
+        
+        <p>Paged.js opens up powerful possibilities for creating print documents with web technologies. While there's a learning curve to mastering paged media CSS, the result is a flexible, maintainable workflow for producing high-quality printed materials.</p>
+        
+        <p>The combination of HTML, CSS, and Paged.js allows you to create everything from simple reports to complex books with full control over typography, layout, and structure.</p>
+    </div>
+</body>
+</html>
